@@ -10,3 +10,7 @@ See FSHouseArrest demo which uses iTunes house arrest service to transfer files 
 ex (copy directory from local to app sandbox on device):
 
 FSHouseArrest.exe -s "C:\temp\Caches" -d "../Library/Caches/" -b "com.ImagineLearning.SomeApp"
+
+License
+============================
+The original library was licensed under GPLv2, so by extension so is this fork.
