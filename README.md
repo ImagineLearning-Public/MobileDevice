@@ -1,4 +1,4 @@
-ImagineLearning-MobileDevice
+MobileDevice
 ============================
 
 .NET library to facilitate communication with iDevices. Fork from mobiledevice.codeplex.com, making use of house arrest service (as opposed to AFC like original) to transfer files to an app's documents directory (AFC only exposes Media directory).
