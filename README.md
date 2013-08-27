@@ -13,4 +13,4 @@ FSHouseArrest.exe -s "C:\temp\Caches" -d "../Library/Caches/" -b "com.ImagineLea
 
 License
 ============================
-The original library was licensed under GPLv2, so by extension so is this fork.
+The original library was licensed under GPLv2, by extension so is this fork.
