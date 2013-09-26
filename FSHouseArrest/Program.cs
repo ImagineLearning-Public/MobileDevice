@@ -10,32 +10,63 @@ namespace FSHouseArrest
 {
 	class Program
 	{
+		private static bool _finished = true;
+		private static bool _waitingToConnect = true;
+
 		static void Main(string[] args)
 		{
 			var options = new Options();
 			if (Parser.Default.ParseArguments(args, options))
 			{
-				var iPhone = new iPhone();
-				iPhone.Connect += (sender, e) =>
-				{
-					iPhone.HouseArrestBundleIdentifier = options.HouseArrestBundleIdentifier;
-
-					var root = new DirectoryInfo(options.SourceDirectory).Name;
-					var files = Directory.EnumerateFiles(options.SourceDirectory, "*.*", SearchOption.AllDirectories).ToList();
-					for (int i = 0; i < files.Count; i++)
-					{
-						var file = files[i];
-						var remoteFolder = Path.Combine(options.DestinationDirectory,
-							new FileInfo(file).DirectoryName.Substring(file.IndexOf(root) + root.Length + 1)).Replace(@"\", "/");
-						CreateRemoteDirectory(iPhone, remoteFolder);
-						CopyFile(iPhone, file, Path.Combine(remoteFolder, Path.GetFileName(file)).Replace(@"\", "/"),
-								 ((double)i / (double)files.Count) * 100.0);
-					}
-				};
-
 				while (true)
 				{
-					Thread.Sleep(50);
+					int choice = -1;
+
+					if (!_waitingToConnect)
+					{
+						_waitingToConnect = true;
+
+						var iPhone = new iPhone();
+						iPhone.Connect += (sender, e) =>
+						{
+							iPhone.HouseArrestBundleIdentifier = options.HouseArrestBundleIdentifier;
+
+							var root = new DirectoryInfo(options.SourceDirectory).Name;
+							var files = Directory.EnumerateFiles(options.SourceDirectory, "*.*", SearchOption.AllDirectories).ToList();
+							for (int i = 0; i < files.Count; i++)
+							{
+								var file = files[i];
+								var remoteFolder = Path.Combine(options.DestinationDirectory,
+									new FileInfo(file).DirectoryName.Substring(file.IndexOf(root) + root.Length + 1)).Replace(@"\", "/");
+								CreateRemoteDirectory(iPhone, remoteFolder);
+								CopyFile(iPhone, file, Path.Combine(remoteFolder, Path.GetFileName(file)).Replace(@"\", "/"),
+									((double)i / (double)files.Count) * 100.0);
+							}
+
+							_finished = true;
+						};
+					}
+					else if (_finished)
+					{
+						Console.WriteLine("1. Start sync");
+						Console.WriteLine("2. Exit");
+						choice = Convert.ToInt32(Console.ReadLine());
+
+					}
+					else
+					{
+						Thread.Sleep(50);
+					}
+
+					if (choice == 1)
+					{
+						_finished = false;
+						_waitingToConnect = false;
+					}
+					else if (choice == 2)
+					{
+						break;
+					}
 				}
 			}
 		}
@@ -79,8 +110,8 @@ namespace FSHouseArrest
 
 	class Options
 	{
-		[Option('s', "destination", Required = true,
-		  HelpText = "Directory to copy.")]
+		[Option('s', "source", Required = true,
+		  HelpText = "Directory that will be copied.")]
 		public string SourceDirectory { get; set; }
 
 		[Option('d', "destination", Required = true,
