@@ -37,7 +37,7 @@ namespace HouseArrestSync {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("../Library/Caches")]
+        [global::System.Configuration.DefaultSettingValueAttribute("/Library/Caches")]
         public string TargetDirectory {
             get {
                 return ((string)(this["TargetDirectory"]));

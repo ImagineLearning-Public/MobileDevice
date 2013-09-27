@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MobileDevice", "MobileDevice\MobileDevice.csproj", "{76A1D31E-7501-4711-9EC6-F768533B60D6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FSHouseArrest", "FSHouseArrest\FSHouseArrest.csproj", "{31E68E85-731E-42F5-96A5-49611AB94CCC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SingleSync", "SingleSync\SingleSync.csproj", "{31E68E85-731E-42F5-96A5-49611AB94CCC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HouseArrestSync", "HouseArrestSync\HouseArrestSync.csproj", "{4BC1B7C1-5DD7-4441-A122-75E53AEFFF52}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultiSync", "MultiSync\MultiSync.csproj", "{4BC1B7C1-5DD7-4441-A122-75E53AEFFF52}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

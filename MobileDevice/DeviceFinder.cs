@@ -86,24 +86,24 @@ namespace MobileDevice
 									MobileDevice.AMDeviceCopyValue(handle, 0, "UniqueChipID"));
 			iPhone.iPhoneHandle = handle;
 
-			//if (MobileDevice.AMDeviceStopSession(handle) != 0)
-			//{
-			//	return null;
-			//}
-			//if (MobileDevice.AMDeviceDisconnect(handle) != 0)
-			//{
-			//	return null;
-			//}
+			if (MobileDevice.AMDeviceStopSession(handle) != 0)
+			{
+				return null;
+			}
+			if (MobileDevice.AMDeviceDisconnect(handle) != 0)
+			{
+				return null;
+			}
 
 			if (MobileDevice.AFCConnectionOpen(hService, 0, ref hAFC) != 0)
 			{
 				return null;
 			}
 
-			//if (MobileDevice.AFCConnectionClose(hAFC) != 0)
-			//{
-			//	return null;
-			//}
+			if (MobileDevice.AFCConnectionClose(hAFC) != 0)
+			{
+				return null;
+			}
 
 			return iPhone;
 		}
