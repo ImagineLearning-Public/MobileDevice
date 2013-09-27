@@ -10,22 +10,10 @@ namespace MobileDevice
 	public class iPhone
 	{
 		private bool _connected;
-		private DeviceNotificationCallback _dnc;
-		private DeviceRestoreNotificationCallback _drn1;
-		private DeviceRestoreNotificationCallback _drn2;
-		private DeviceRestoreNotificationCallback _drn3;
-		private DeviceRestoreNotificationCallback _drn4;
 
 		internal unsafe void* hAFC;
 		internal unsafe void* hService;
 		internal unsafe void* iPhoneHandle;
-
-		public event ConnectEventHandler Connect;
-		public event EventHandler DfuConnect;
-		public event EventHandler DfuDisconnect;
-		public event ConnectEventHandler Disconnect;
-		public event EventHandler RecoveryModeEnter;
-		public event EventHandler RecoveryModeLeave;
 
 		public unsafe void* AFCHandle
 		{
