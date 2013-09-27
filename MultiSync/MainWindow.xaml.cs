@@ -7,7 +7,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 
-namespace HouseArrestSync
+namespace MultiSync
 {
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml

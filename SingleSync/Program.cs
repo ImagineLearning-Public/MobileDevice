@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 
-namespace FSHouseArrest
+namespace SingleSync
 {
 	class Program
 	{

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace HouseArrestSync {
+namespace MultiSync {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
