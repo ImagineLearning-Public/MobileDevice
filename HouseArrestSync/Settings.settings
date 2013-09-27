@@ -1,0 +1,15 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="HouseArrestSync" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="SourceDirectory" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\temp\Caches</Value>
+    </Setting>
+    <Setting Name="TargetDirectory" Type="System.String" Scope="User">
+      <Value Profile="(Default)">../Library/Caches</Value>
+    </Setting>
+    <Setting Name="BundleIdentifier" Type="System.String" Scope="User">
+      <Value Profile="(Default)">com.ImagineLearning.IL</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

@@ -48,8 +48,7 @@ namespace MobileDevice
 				case FileAccess.ReadWrite:
 					throw new NotImplementedException("Read+Write not (yet) implemented");
 			}
-			string str = phone.FullPath(phone.GetCurrentDirectory(), path);
-			int num2 = MobileDevice.AFCFileRefOpen(phone.AFCHandle, str, (int)none, 0, out num);
+			int num2 = MobileDevice.AFCFileRefOpen(phone.AFCHandle, path, (int)none, 0, out num);
 			if (num2 != 0)
 			{
 				throw new IOException("AFCFileRefOpen failed with error " + num2);
