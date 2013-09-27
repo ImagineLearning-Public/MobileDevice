@@ -9,6 +9,8 @@ namespace MobileDevice
 {
 	public class iPhone
 	{
+		private static readonly char[] PathSeparators = { '/' };
+
 		private bool _connected;
 		private string _currentDirectory;
 		private DeviceNotificationCallback _dnc;
@@ -16,11 +18,12 @@ namespace MobileDevice
 		private DeviceRestoreNotificationCallback _drn2;
 		private DeviceRestoreNotificationCallback _drn3;
 		private DeviceRestoreNotificationCallback _drn4;
+		
+		private bool _wasAfc2;
+
 		internal unsafe void* hAFC;
 		internal unsafe void* hService;
 		internal unsafe void* iPhoneHandle;
-		private static readonly char[] path_separators = new char[] { '/' };
-		private bool _wasAfc2;
 
 		public event ConnectEventHandler Connect;
 		public event EventHandler DfuConnect;
@@ -244,15 +247,15 @@ namespace MobileDevice
 			}
 			if (path2[0] == '/')
 			{
-				strArray = path2.Split(path_separators);
+				strArray = path2.Split(PathSeparators);
 			}
 			else if (path1[0] == '/')
 			{
-				strArray = (path1 + "/" + path2).Split(path_separators);
+				strArray = (path1 + "/" + path2).Split(PathSeparators);
 			}
 			else
 			{
-				strArray = ("/" + path1 + "/" + path2).Split(path_separators);
+				strArray = ("/" + path1 + "/" + path2).Split(PathSeparators);
 			}
 			var strArray2 = new string[strArray.Length];
 			int count = 0;
