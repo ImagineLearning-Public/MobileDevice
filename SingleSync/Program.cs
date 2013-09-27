@@ -26,10 +26,10 @@ namespace FSHouseArrest
 					{
 						_waitingToConnect = true;
 
-						var iPhone = new iPhone();
-						iPhone.Connect += (sender, e) =>
+						DeviceFinder df = new DeviceFinder();
+						df.DeviceDiscovered += (s, e) =>
 						{
-							iPhone.HouseArrestBundleIdentifier = options.HouseArrestBundleIdentifier;
+							e.iPhone.ConnectViaHouseArrest("com.ImagineLearning.IL");
 
 							var root = new DirectoryInfo(options.SourceDirectory).Name;
 							var files = Directory.EnumerateFiles(options.SourceDirectory, "*.*", SearchOption.AllDirectories).ToList();
@@ -38,13 +38,12 @@ namespace FSHouseArrest
 								var file = files[i];
 								var remoteFolder = Path.Combine(options.DestinationDirectory,
 									new FileInfo(file).DirectoryName.Substring(file.IndexOf(root) + root.Length + 1)).Replace(@"\", "/");
-								CreateRemoteDirectory(iPhone, remoteFolder);
-								CopyFile(iPhone, file, Path.Combine(remoteFolder, Path.GetFileName(file)).Replace(@"\", "/"),
+								CreateRemoteDirectory(e.iPhone, remoteFolder);
+								CopyFile(e.iPhone, file, Path.Combine(remoteFolder, Path.GetFileName(file)).Replace(@"\", "/"),
 									((double)i / (double)files.Count) * 100.0);
 							}
-
-							_finished = true;
 						};
+						df.GetiPhonesAsync();
 					}
 					else if (_finished)
 					{
@@ -74,13 +73,13 @@ namespace FSHouseArrest
 		public static void CreateRemoteDirectory(iPhone iPhone, string directory)
 		{
 			//Log("Create Directory", directory);
-			iPhone.CreateDirectory(directory, iPhone.ConnectMode.HouseArrest);
+			iPhone.CreateDirectory(directory);
 		}
 
 		public static void CopyFile(iPhone iPhone, string source, string destination, double percentage)
 		{
 			Log("OK " + Math.Round(percentage, 2) + "%", destination);
-			iPhone.CopyFile(source, destination, iPhone.ConnectMode.HouseArrest);
+			iPhone.CopyFile(source, destination);
 		}
 
 		public static void Log(string header, string line)
