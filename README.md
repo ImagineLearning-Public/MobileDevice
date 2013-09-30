@@ -8,15 +8,15 @@
 
 ### SingleSync
 
-See SingleSync demo which uses iTunes house arrest service to transfer files to an app's (Sandbox)/Library/Caches directory.
+Command line tool which uses iTunes house arrest service to sync a local directory to an iOS app's sandbox directory.
 
-Example: Copy directory from local to app sandbox on device
+Example: Copy directory from local to (AppSandbox)/Library/Caches on device
 
 	SingleSync.exe -s "C:\temp\Caches" -d "/Library/Caches/" -b "com.ImagineLearning.SomeAppName"
 
 ### MultiSync
 
-Same concept as SingleSync but it's a GUI tool that syncs a directory to every iPad that is visible in iTunes.
+Same concept as SingleSync but it's a GUI tool that will sync the directory to every iDevice visible in iTunes.
 
 ## License
 
