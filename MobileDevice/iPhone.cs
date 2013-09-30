@@ -56,7 +56,7 @@ namespace MobileDevice
 		{
 		}
 
-		public iPhone(string activationState, string deviceBasebandBootloaderVersion, string deviceBasebandVersion, string deviceBuildVersion, string deviceFirmwareVersion,
+		internal iPhone(string activationState, string deviceBasebandBootloaderVersion, string deviceBasebandVersion, string deviceBuildVersion, string deviceFirmwareVersion,
 					  string deviceId, string deviceIntegratedCircuitCardIdentity, string deviceiTunesHasConnected, string deviceModelNumber, string deviceName,
 					  string devicePhoneNumber, string deviceProductType, string deviceSerial, string deviceSIMStatus, string deviceType, string deviceVersion,
 					  string deviceWiFiAddress, string internationalMobileSubscriberIdentity, string internationalMobileEquipmentIdentity, string uniqueChipID)

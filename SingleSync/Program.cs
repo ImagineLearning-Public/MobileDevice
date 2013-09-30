@@ -26,24 +26,24 @@ namespace SingleSync
 					{
 						_waitingToConnect = true;
 
-						DeviceFinder df = new DeviceFinder();
-						df.DeviceDiscovered += (s, e) =>
+						var phoneManager = new iPhoneManager();
+						phoneManager.DeviceDiscovered += (s, e) =>
 						{
-							e.iPhone.ConnectViaHouseArrest("com.ImagineLearning.IL");
+							e.iPhone.ConnectViaHouseArrest(options.BundleIdentifier);
 
 							var root = new DirectoryInfo(options.SourceDirectory).Name;
 							var files = Directory.EnumerateFiles(options.SourceDirectory, "*.*", SearchOption.AllDirectories).ToList();
 							for (int i = 0; i < files.Count; i++)
 							{
 								var file = files[i];
-								var remoteFolder = Path.Combine(options.DestinationDirectory,
+								var remoteFolder = Path.Combine(options.TargetDirectory,
 									new FileInfo(file).DirectoryName.Substring(file.IndexOf(root) + root.Length + 1)).Replace(@"\", "/");
 								CreateRemoteDirectory(e.iPhone, remoteFolder);
 								CopyFile(e.iPhone, file, Path.Combine(remoteFolder, Path.GetFileName(file)).Replace(@"\", "/"),
 									((double)i / (double)files.Count) * 100.0);
 							}
 						};
-						df.GetiPhonesAsync();
+						phoneManager.GetiPhonesAsync();
 					}
 					else if (_finished)
 					{
@@ -72,7 +72,6 @@ namespace SingleSync
 
 		public static void CreateRemoteDirectory(iPhone iPhone, string directory)
 		{
-			//Log("Create Directory", directory);
 			iPhone.CreateDirectory(directory);
 		}
 
@@ -115,10 +114,10 @@ namespace SingleSync
 
 		[Option('d', "destination", Required = true,
 		  HelpText = "Target directory on iDevice.")]
-		public string DestinationDirectory { get; set; }
+		public string TargetDirectory { get; set; }
 
-		[Option('b', "bundleidentifier", HelpText = "Bundle identifier if using house arrest service.")]
-		public string HouseArrestBundleIdentifier { get; set; }
+		[Option('b', "bundleidentifier", HelpText = "App bundle identifier for house arrest service.")]
+		public string BundleIdentifier { get; set; }
 
 		[HelpOption]
 		public string GetUsage()

@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MobileDevice
 {
-	public class DeviceFinder
+	public class iPhoneManager
 	{
 		private DeviceNotificationCallback _deviceNotificationCallback;
 		public event EventHandler<iPhoneEventArgs> DeviceDiscovered;

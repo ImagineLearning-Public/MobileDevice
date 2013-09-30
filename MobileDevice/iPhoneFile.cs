@@ -103,7 +103,7 @@ namespace MobileDevice
 
 		public override unsafe void SetLength(long value)
 		{
-			MobileDevice.AFCFileRefSetFileSize(this._phone.AFCHandle, this._handle, (uint)value);
+			MobileDevice.AFCFileRefSetFileSize(_phone.AFCHandle, _handle, (uint)value);
 		}
 
 		public override unsafe void Write(byte[] buffer, int offset, int count)
@@ -123,7 +123,7 @@ namespace MobileDevice
 				Buffer.BlockCopy(buffer, offset, buffer2, 0, count);
 			}
 			uint len = (uint)count;
-			MobileDevice.AFCFileRefWrite(this._phone.AFCHandle, this._handle, buffer2, len);
+			MobileDevice.AFCFileRefWrite(_phone.AFCHandle, _handle, buffer2, len);
 		}
 
 		public override bool CanRead

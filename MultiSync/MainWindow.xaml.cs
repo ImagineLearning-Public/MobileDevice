@@ -35,7 +35,7 @@ namespace MultiSync
 		{
 			Devices.Items.Clear();
 
-			var deviceFinder = new DeviceFinder();
+			var deviceFinder = new iPhoneManager();
 			deviceFinder.DeviceDiscovered += (s, args) => Dispatcher.BeginInvoke((Action)(() =>
 			{
 				Devices.Items.Add(
@@ -71,10 +71,9 @@ namespace MultiSync
 			var syncWorker = new BackgroundWorker();
 			syncWorker.DoWork += (s, args) =>
 			{
-				var iPhoneSyncClosure = _devicesToSync.Dequeue();
-				iPhoneSyncClosure.ProgressChanged +=
-					(sender, progressChangedEventArgs) => syncWorker.ReportProgress(progressChangedEventArgs.NewProgress, iPhoneSyncClosure);
-				iPhoneSyncClosure.SyncCompleted += (syncer, syncArgs) =>
+				var phoneSyncer = _devicesToSync.Dequeue();
+				phoneSyncer.ProgressChanged += (sender, progressChangedEventArgs) => syncWorker.ReportProgress(progressChangedEventArgs.NewProgress, phoneSyncer);
+				phoneSyncer.SyncCompleted += (syncer, syncArgs) =>
 				{
 					if (_devicesToSync.Count > 0)
 					{
@@ -89,9 +88,8 @@ namespace MultiSync
 						}));
 					}
 				};
-				var iPhoneClosure = iPhoneSyncClosure.iPhone;
-				iPhoneClosure.ConnectViaHouseArrest(_bundleIdentifier);
-				iPhoneSyncClosure.Sync(_sourceDirectory, _targetDirectory);
+				phoneSyncer.iPhone.ConnectViaHouseArrest(_bundleIdentifier);
+				phoneSyncer.Sync(_sourceDirectory, _targetDirectory);
 			};
 			syncWorker.WorkerReportsProgress = true;
 			syncWorker.ProgressChanged += (s, args) =>
@@ -112,17 +110,17 @@ namespace MultiSync
 			set
 			{
 				_progress = value;
-				OnPropertyChanged("Progress");
+				OnPropertyChanged();
 			}
 		}
 
 		public event EventHandler<ProgressChangedEventArgs> ProgressChanged;
 		public event EventHandler SyncCompleted;
-		public event PropertyChangedEventHandler PropertyChanged;
 
+		public event PropertyChangedEventHandler PropertyChanged;
 		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
 		{
-			PropertyChangedEventHandler handler = PropertyChanged;
+			var handler = PropertyChanged;
 			if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
 		}
 
@@ -139,23 +137,12 @@ namespace MultiSync
 					MessageBox.Show(string.Format("Create directory failed: {0}", sourceDirectory));
 				}
 
-				if (ProgressChanged != null)
-				{
-					ProgressChanged(this, new ProgressChangedEventArgs() { NewProgress = (int)(((double)i / (double)files.Count) * 100.0) });
-				}
-
+				ProgressChanged.RaiseEvent(this, new ProgressChangedEventArgs { NewProgress = (int)(((double)i / (double)files.Count) * 100.0) });
 				iPhone.CopyFile(file, Path.Combine(remoteFolder, Path.GetFileName(file)).Replace(@"\", "/"));
 			}
 
-			if (ProgressChanged != null)
-			{
-				ProgressChanged(this, new ProgressChangedEventArgs() { NewProgress = 100 });
-			}
-
-			if (SyncCompleted != null)
-			{
-				SyncCompleted(this, new EventArgs());
-			}
+			ProgressChanged.RaiseEvent(this, new ProgressChangedEventArgs { NewProgress = 100 });
+			SyncCompleted.RaiseEvent(this, new EventArgs());
 		}
 	}
 

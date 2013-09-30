@@ -51,7 +51,7 @@
     <Compile Include="DeviceRestoreNotificationCallback.cs" />
     <Compile Include="iPhone.cs" />
     <Compile Include="iPhoneFile.cs" />
-    <Compile Include="DeviceFinder.cs" />
+    <Compile Include="iPhoneManager.cs" />
     <Compile Include="MobileDevice.cs" />
     <Compile Include="NotificationMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
