@@ -6,19 +6,19 @@ namespace MultiSync
 	{
 		public static void RaiseEvent<T>(this EventHandler<T> eventHandler, object sender, T args)
 		{
-			var threadSafe = eventHandler;
-			if (threadSafe != null)
+			var threadSafeEventHandler = eventHandler;
+			if (threadSafeEventHandler != null)
 			{
-				threadSafe(sender, args);
+				threadSafeEventHandler(sender, args);
 			}
 		}
 
 		public static void RaiseEvent(this EventHandler eventHandler, object sender, EventArgs args)
 		{
-			var threadSafe = eventHandler;
-			if (threadSafe != null)
+			var threadSafeEventHandler = eventHandler;
+			if (threadSafeEventHandler != null)
 			{
-				threadSafe(sender, args);
+				threadSafeEventHandler(sender, args);
 			}
 		}
 	}

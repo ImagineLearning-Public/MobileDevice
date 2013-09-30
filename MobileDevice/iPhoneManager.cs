@@ -20,10 +20,11 @@ namespace MobileDevice
 
 		private unsafe void DeviceNotifyCallback(ref AMDeviceNotificationCallbackInfo callback_info)
 		{
-			if (DeviceDiscovered != null)
+			var threadSafeEventHandler = DeviceDiscovered;
+			if (threadSafeEventHandler != null)
 			{
 				var iPhone = CreateiPhone(callback_info.dev);
-				DeviceDiscovered(this, new iPhoneEventArgs { iPhone = iPhone });
+				threadSafeEventHandler(this, new iPhoneEventArgs { iPhone = iPhone });
 			}
 		}
 
