@@ -112,7 +112,7 @@ namespace SingleSync
 		  HelpText = "Directory that will be copied.")]
 		public string SourceDirectory { get; set; }
 
-		[Option('d', "destination", Required = true,
+		[Option('t', "target", Required = true,
 		  HelpText = "Target directory on iDevice.")]
 		public string TargetDirectory { get; set; }
 

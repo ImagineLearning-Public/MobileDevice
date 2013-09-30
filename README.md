@@ -12,7 +12,7 @@ Command line tool which uses iTunes house arrest service to sync a local directo
 
 Example: Copy directory from local to (AppSandbox)/Library/Caches on device
 
-	SingleSync.exe -s "C:\temp\Caches" -d "/Library/Caches/" -b "com.ImagineLearning.SomeAppName"
+	SingleSync.exe -s "C:\temp\Caches" -t "/Library/Caches/" -b "com.ImagineLearning.SomeAppName"
 
 ### MultiSync
 
