@@ -29,6 +29,13 @@ namespace MultiSync
 		{
 			SourceDirectory.Text = (string)Settings.Default["SourceDirectory"];
 			TargetDirectory.Text = (string)Settings.Default["TargetDirectory"];
+            RecentFileUpdated += (s, args) =>
+            {
+                Dispatcher.BeginInvoke((Action)(() =>
+                {
+                    RecentFile.Text = "Most Recent File: " + args.CurrentFile;
+                }));
+            };
 		}
 
 		private void FindDevices_Click(object sender, RoutedEventArgs e)
@@ -69,35 +76,52 @@ namespace MultiSync
 		private void BeginSync()
 		{
 			var syncWorker = new BackgroundWorker();
-			syncWorker.DoWork += (s, args) =>
-			{
-				var phoneSyncer = _devicesToSync.Dequeue();
-				phoneSyncer.ProgressChanged += (sender, progressChangedEventArgs) => syncWorker.ReportProgress(progressChangedEventArgs.NewProgress, phoneSyncer);
-				phoneSyncer.SyncCompleted += (syncer, syncArgs) =>
-				{
-					if (_devicesToSync.Count > 0)
-					{
-						BeginSync();
-					}
-					else
-					{
-						Dispatcher.BeginInvoke((Action)(() =>
-						{
-							SyncDevices.IsEnabled = true;
-							Devices.Items.Clear();
-						}));
-					}
-				};
-				phoneSyncer.iPhone.ConnectViaHouseArrest(_bundleIdentifier);
-				phoneSyncer.Sync(_sourceDirectory, _targetDirectory);
-			};
-			syncWorker.WorkerReportsProgress = true;
-			syncWorker.ProgressChanged += (s, args) =>
-			{
-				((iPhoneSync)args.UserState).Progress = args.ProgressPercentage;
-			};
-			syncWorker.RunWorkerAsync();
+            if (Directory.Exists(_sourceDirectory))
+            {
+                syncWorker.DoWork += (s, args) =>
+                {
+                    var phoneSyncer = _devicesToSync.Dequeue();
+                    phoneSyncer.ProgressChanged += (sender, progressChangedEventArgs) =>
+                        {
+                            syncWorker.ReportProgress(progressChangedEventArgs.NewProgress, phoneSyncer);
+                            RecentFileUpdated.RaiseEvent(this, new CurrentFileUpdatedEventArgs() { CurrentFile = progressChangedEventArgs.CurrentFile });
+                        };
+
+                    phoneSyncer.SyncCompleted += (syncer, syncArgs) =>
+                    {
+                        if (_devicesToSync.Count > 0)
+                        {
+                            BeginSync();
+                        }
+                        else
+                        {
+                            Dispatcher.BeginInvoke((Action)(() =>
+                            {
+                                SyncDevices.IsEnabled = true;
+                                Devices.Items.Clear();
+                            }));
+                            MessageBox.Show("Completed Sync Job.");
+                        }
+                    };
+                    phoneSyncer.iPhone.ConnectViaHouseArrest(_bundleIdentifier);
+                    phoneSyncer.Sync(_sourceDirectory, _targetDirectory);
+                };
+                syncWorker.WorkerReportsProgress = true;
+                syncWorker.ProgressChanged += (s, args) =>
+                {
+                    ((iPhoneSync)args.UserState).Progress = args.ProgressPercentage;
+                };
+                syncWorker.RunWorkerAsync();
+            }
+            else
+            {
+                MessageBox.Show(string.Format("Source Directory Does not exist. Please enter a valid directory: {0}", _sourceDirectory));
+            }
 		}
+
+        public event EventHandler<CurrentFileUpdatedEventArgs> RecentFileUpdated;
+
+
 	}
 
 	public class iPhoneSync : INotifyPropertyChanged
@@ -134,11 +158,12 @@ namespace MultiSync
 				var remoteFolder = Path.Combine(targetDirectory, new FileInfo(file).DirectoryName.Substring(file.IndexOf(root) + root.Length + 1)).Replace(@"\", "/");
 				if (!iPhone.CreateDirectory(remoteFolder))
 				{
-					MessageBox.Show(string.Format("Create directory failed: {0}", sourceDirectory));
+					MessageBox.Show(string.Format("Create directory failed: {0}", remoteFolder));
 				}
 
-				ProgressChanged.RaiseEvent(this, new ProgressChangedEventArgs { NewProgress = (int)(((double)i / (double)files.Count) * 100.0) });
-				iPhone.CopyFile(file, Path.Combine(remoteFolder, Path.GetFileName(file)).Replace(@"\", "/"));
+                string remoteFile = Path.Combine(remoteFolder, Path.GetFileName(file)).Replace(@"\", "/");
+                ProgressChanged.RaiseEvent(this, new ProgressChangedEventArgs { NewProgress = (int)(((double)i / (double)files.Count) * 100.0), CurrentFile = remoteFile });
+                iPhone.CopyFile(file, remoteFile);
 			}
 
 			ProgressChanged.RaiseEvent(this, new ProgressChangedEventArgs { NewProgress = 100 });
@@ -149,5 +174,11 @@ namespace MultiSync
 	public class ProgressChangedEventArgs : EventArgs
 	{
 		public int NewProgress { get; set; }
+        public string CurrentFile { get; set; }
 	}
+
+    public class CurrentFileUpdatedEventArgs : EventArgs
+    {
+        public string CurrentFile { get; set; }
+    }
 }
