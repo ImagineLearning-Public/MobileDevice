@@ -353,7 +353,7 @@ namespace MobileDevice
 			MobileDevice.AFCDirectoryRead(hAFC, dir, ref buffer);
 			while (buffer != null)
 			{
-				if (!IsDirectory(path))
+                if (!IsDirectory(string.Format("{0}/{1}", path, buffer)))
 				{
 					list.Add(buffer);
 				}
